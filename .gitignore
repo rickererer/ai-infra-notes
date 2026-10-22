@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# 模型与数据（不入库）
+*.pt
+*.pth
+*.bin
+*.safetensors
+data/
+models/
+outputs/
+wandb/
+runs/
+
+# Obsidian 配置（不入库，仓库只留笔记正文）
+.obsidian/
+
+# 本地同步脚本（不入库）
+sync.cmd
+
+# 系统
+.DS_Store
+Thumbs.db
+
+# 环境变量
+.env
