@@ -8,15 +8,16 @@
     4. 准确率评估（光看 loss 不知道对错）
 
 运行：
-    D:/Anaconda/python.exe 02-mnist.py
+    python 02-mnist.py
+
+第一次跑会自动下载 MNIST（约 11 MB）到脚本同级的 data/ 目录。
+如果下载卡住，先设好代理环境变量再运行，脚本本身不改网络设置：
+    HTTPS_PROXY=http://127.0.0.1:7890 python 02-mnist.py
 """
 
 import os
 
-# 下载数据集要走代理，而且不能用环境里那个默认的，得指定 7897
-os.environ["HTTP_PROXY"] = "http://127.0.0.1:7897"
-os.environ["HTTPS_PROXY"] = "http://127.0.0.1:7897"
-os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
+os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")  # 某些环境里 numpy 和 torch 各带一份 OpenMP，同进程加载会直接退出
 
 import time
 import torch

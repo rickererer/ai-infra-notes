@@ -2,13 +2,13 @@
 第一个练习：三个最小实验，建立手感。
 
 运行方式：
-    D:/Anaconda/python.exe 01-first-steps.py
+    python 01-first-steps.py
 
 不用先看视频。先跑完，再回去看讲解，会顺很多。
 """
 
 import os
-os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")  # Anaconda 的 numpy 和 torch 会抢 MKL
+os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")  # 某些环境里 numpy 和 torch 各带一份 OpenMP，同进程加载会直接退出
 
 import time
 import torch
@@ -46,6 +46,11 @@ print("=" * 52)
 print("Part 2  同样的矩阵乘法，CPU 和 GPU 差多少")
 print("=" * 52)
 
+if not torch.cuda.is_available():
+    print("没检测到可用的 CUDA 设备，Part 2 和 Part 3 跳过。")
+    print("这两部分是为了看 GPU 和 CPU 的差异，需要在有 NVIDIA 显卡的机器上跑。")
+    raise SystemExit(0)
+
 n = 4096
 a = torch.randn(n, n)
 b = torch.randn(n, n)
@@ -76,7 +81,8 @@ print(f"GPU FP16:      {fp16_ms:.1f} ms")
 print()
 print(f"GPU 相对 CPU（同为 FP32）: {cpu_ms / gpu_ms:.1f} 倍")
 print(f"GPU 换半精度相对 FP32:     {gpu_ms / fp16_ms:.1f} 倍")
-print("FP16 那行走的是 Tensor Core，这就是 312 TFLOPS 和 19.5 TFLOPS 的差别来源。")
+print("FP16 那行走的是 Tensor Core。这个单元只认低精度输入、只做矩阵乘，")
+print("算力远高于普通运算单元，所以同一个模型换个精度就能快出好几倍。")
 
 
 
@@ -107,5 +113,5 @@ print(f"CPU: {small_cpu_ms:.0f} ms")
 print(f"GPU: {small_gpu_ms:.0f} ms")
 print()
 print("对照 Part 2 的加速比看这个结果。")
-print("如果差距远没有那么大，甚至 GPU 更慢，那就是 kernel 启动开销吃掉了收益。")
-print("这就是 overhead-bound 长什么样。")
+print("如果差距远没有那么大，甚至 GPU 更慢，那就是 kernel 启动的固定开销吃掉了收益。")
+print("运算规模越小，这笔固定开销摊得越薄，GPU 越不划算。")
