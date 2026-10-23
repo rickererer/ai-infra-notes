@@ -8,6 +8,12 @@ venv/
 # Jupyter
 .ipynb_checkpoints/
 
+# 本地练习 notebook（跟着教程敲的，不入库）
+notebooks/
+
+# 本地启动脚本
+start-jupyter.cmd
+
 # 模型与数据（不入库）
 *.pt
 *.pth
